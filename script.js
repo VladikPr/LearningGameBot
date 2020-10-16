@@ -6,70 +6,59 @@ function isNumber(val){
 }
 // Variables declaration
 //Create a random integer between two numbers
-function getRandomInt() {
-    let min = 1;
-    let max = 100;
-    return function(){
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max-min)) + min;
-    }
+function getRandomInt(min,max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max-min)) + min;
 }
-let targetNumber = getRandomInt();
-let wishedNumber = targetNumber();
 
 
-function trialNumber() {
+function start() {
+
+    let wishedNumber = getRandomInt(1,100);
     let trial = 0;
-    return function(){
+    return function repeatPlay(){
+        let num = prompt("Угадай число от 1 до 100");
         trial++;
-        return trial;
-    }
-}
 
-let counter = trialNumber();
-
-function getNumber() {
-    let i = 10 - counter();
-
-    let num = prompt("Угадай число от 1 до 100");
-
-    if (i == 0){
-        let rest = confirm("Попытки закончились, хотите сыграть еще?");
-        if(rest){
-            wishedNumber = targetNumber();
-            counter = trialNumber();
-            getNumber(); 
-        }else{
-            alert( "Игра окончена");
-        };
-        
-    }
-        if (num === null) {
-            alert( "Игра окончена")
-        }else if (!isNumber(num*1)){
-            alert("Введи число!");
-            getNumber();
-        }else if (num*1 > wishedNumber) {
-            alert("Загаданное число меньше, осталось попыток " + i);
-            getNumber();
-        }else if (num*1 < wishedNumber) {
-            alert("Загаданное число больше, осталось попыток " + i);
-            getNumber();
-        }else if ( num*1 == wishedNumber) {
-            let restart = confirm("Поздравляю, Вы угадали!!! Хотели бы сыграть еще?");
-            
-            if(restart){
-                wishedNumber = targetNumber();
-                targetNumber = getRandomInt(1,100);
-                counter = trialNumber();
-                getNumber(); 
+        if (trial == 10){
+            let rest = confirm("Попытки закончились, хотите сыграть еще?");
+            if(rest){
+                wishedNumber = getRandomInt(1,100);
+                trial = 0;
+                repeatPlay(); 
             }else{
                 alert( "Игра окончена");
+            };
+            
+        }else{
+            if (num === null) {
+                alert( "Игра окончена")
+            }else if (!isNumber(num*1)){
+                alert("Введи число!");
+                repeatPlay();
+            }else if (num*1 > wishedNumber) {
+                alert("Загаданное число меньше, осталось попыток " + (10-trial));
+                repeatPlay();
+            }else if (num*1 < wishedNumber) {
+                alert("Загаданное число больше, осталось попыток " + (10-trial));
+                repeatPlay();
+            }else if ( num*1 == wishedNumber) {
+                let restart = confirm("Поздравляю, Вы угадали!!! Хотели бы сыграть еще?");
+                
+                if(restart){
+                    wishedNumber = getRandomInt(1,100);
+                    trial = 0;
+                    repeatPlay(); 
+                }else{
+                    alert( "Игра окончена");
+                }
             }
         }
+
+        return trial;  
+    }
+   
 }
 
-getNumber();
-
-
+start()();
